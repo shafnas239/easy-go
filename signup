@@ -254,7 +254,9 @@ class _SignUpScreenState extends State<SignUpScreen>{
 
   Widget buildLoginbtn() {
     return GestureDetector(
-      onTap: () => print('Login Pressed'),
+      onTap: () {
+      Navigator.pop(context);
+      },
       child: RichText(
         text: TextSpan(
             children: [
