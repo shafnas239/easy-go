@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:email_validator/email_validator.dart';
 
 
 class SignUpScreen extends StatefulWidget{
@@ -10,7 +11,10 @@ class SignUpScreen extends StatefulWidget{
 
 class _SignUpScreenState extends State<SignUpScreen>{
 
-  Widget bildFirstName() {
+  bool isvalid = true;
+  final emailController = TextEditingController();
+
+  Widget buildFirstName() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -53,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
     );
   }
 
-  Widget bildLastName() {
+  Widget buildLastName() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,6 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
           height: 45,
           width: 300,
           child: TextField(
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87,
@@ -232,7 +237,27 @@ class _SignUpScreenState extends State<SignUpScreen>{
       padding: EdgeInsets.symmetric(vertical: 25),
       width: 100,
       child: ElevatedButton(
-        onPressed: () => print('Sign Up Pressed'),
+        onPressed: () {
+          if(!EmailValidator.validate(emailController.text)){
+            ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(
+                content: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.all(10),
+                  height: 40,
+                  decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Text("Invalid Email",style: TextStyle(color: Colors.black),),
+              ),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+          );
+        }
+        },
         style: ElevatedButton.styleFrom(
           primary: Colors.white,
           padding: EdgeInsets.all(10.0),
@@ -255,7 +280,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
   Widget buildLoginbtn() {
     return GestureDetector(
       onTap: () {
-      Navigator.pop(context);
+        Navigator.pop(context);
       },
       child: RichText(
         text: TextSpan(
@@ -330,9 +355,9 @@ class _SignUpScreenState extends State<SignUpScreen>{
                         ),
                       ),
                       SizedBox(height: 20),
-                      bildFirstName(),
+                      buildFirstName(),
                       SizedBox(height: 20),
-                      bildLastName(),
+                      buildLastName(),
                       SizedBox(height: 20),
                       buildEmail(),
                       SizedBox(height: 20),
@@ -351,4 +376,8 @@ class _SignUpScreenState extends State<SignUpScreen>{
       ),
     );
   }
+}
+void Validate(String email) {
+  bool isvalid = EmailValidator.validate(email);
+  print(isvalid);
 }
